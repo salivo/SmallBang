@@ -229,7 +229,7 @@ export default function DepoPage() {
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Create New Order</h2>
+              <h2 className="text-xl font-bold">Vytvořit novou obědnávku</h2>
               <button
                 onClick={toggleModal}
                 className="text-gray-500 hover:text-gray-700"
@@ -434,7 +434,7 @@ export default function DepoPage() {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="Customer_name"
                 >
-                  Customer Name
+                  Jméno zákazníka
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -452,7 +452,7 @@ export default function DepoPage() {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="Customer_tel"
                 >
-                  Customer Phone
+                  Telefon zákazníka
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -470,7 +470,7 @@ export default function DepoPage() {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="Customer_email"
                 >
-                  Customer Email
+                  Email uživatele
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -488,7 +488,7 @@ export default function DepoPage() {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="Customer_address"
                 >
-                  Customer Address
+                  Dresa odesílatele
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -506,7 +506,7 @@ export default function DepoPage() {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="Sender_address"
                 >
-                  Sender Address
+                  Adresa odesílatele
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -524,7 +524,7 @@ export default function DepoPage() {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="courier"
                 >
-                  Select Courier
+                  Vyberte Kurýra
                 </label>
                 <select
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -569,36 +569,68 @@ export default function DepoPage() {
         </div>
       )}
 
-      <ul className="space-y-2">
-        {orders.map((order) => (
-          <li
-            key={order.id}
-            className="flex justify-between items-center border-b pb-2"
-          >
-            <span>{order.Customer_name}</span>
-            <div>
-              <button
-                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded mr-2"
-                onClick={() => toggleEditModal(order)}
-              >
-                Edit
-              </button>
-              <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mr-2"
-                onClick={() => handleDelete(order.id)}
-              >
-                Delete
-              </button>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                onClick={() => handleGenerateQRCode(order)}
-              >
-                Generate QR Code
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      
+        
+      
+<ul className="space-y-2">
+  <li className="flex justify-between items-center border-b pb-2 font-bold">
+    <span className="w-1/4">Jméno</span>
+    <span className="w-1/4">Adresa</span>
+    <span className="w-1/4">Stav</span>
+    <span className="w-1/4"></span> {/* Placeholder for alignment */}
+  </li>
+  {orders.map((order) => (
+    <li
+      key={order.id}
+      className="flex justify-between items-center border-b pb-2"
+    >
+      <span className="w-1/4">{order.Customer_name}</span>
+      <span className="w-1/4">{order.Customer_address}</span>
+
+      {/* Status with adjusted background and text color */}
+      <div className="w-1/4">
+      <span className={`text-lg  inline-block py-1 px-3 rounded-full 
+        ${
+          order.status === 0 
+            ? 'bg-green-200' // Light green for 'na skladě'
+            : order.status === 1 
+            ? 'bg-yellow-200' // Light yellow for 'na cestě'
+            : 'bg-blue-200' // Light blue for 'doruceno'
+        } text-black font-semibold`}>
+        {order.status === 0 
+          ? 'na skladě' 
+          : order.status === 1 
+          ? 'na cestě' 
+          : 'doruceno'}
+      </span>
+      </div>
+
+      <div className="w-1/4 flex justify-end space-x-2">
+        <button
+          className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
+          onClick={() => toggleEditModal(order)}
+        >
+          Editovat
+        </button>
+        <button
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+          onClick={() => handleDelete(order.id)}
+        >
+          Odstranit
+        </button>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+          onClick={() => handleGenerateQRCode(order)}
+        >
+          Generovat QR Kód
+        </button>
+      </div>
+    </li>
+  ))}
+</ul>
+
+
+
     </div>
   );
 }
