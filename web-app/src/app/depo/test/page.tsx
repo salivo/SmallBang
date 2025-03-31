@@ -8,6 +8,7 @@ import {
   deleteOrder,
   getOrders,
   updateOrder,
+  createCourier,
 } from "@/lib/order_actions";
 import {
   Search,
@@ -93,6 +94,13 @@ export default function DepoPage() {
     courier: "",
     status: "pending",
   });
+
+  // State for courier form data and modal visibility
+  const [courierFormData, setCourierFormData] = useState({
+    name: "",
+    email: "",
+  });
+  const [isCourierModalOpen, setIsCourierModalOpen] = useState(false);
 
   // State for data
   const [couriers, setCouriers] = useState<Courier[]>([]);
@@ -396,6 +404,33 @@ export default function DepoPage() {
     `);
 
     printWindow.document.close();
+  };
+
+  // Handle courier form input changes
+  const handleCourierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCourierFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle courier form submission
+  const handleCourierSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setMessage("");
+
+    try {
+      await createCourier(courierFormData);
+      setMessage("Courier created successfully!");
+      setCourierFormData({ name: "", email: "" });
+      setIsCourierModalOpen(false);
+      fetchData(); // Refresh couriers
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      setMessage("Error creating courier: " + errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Toggle order expansion
@@ -1013,7 +1048,10 @@ export default function DepoPage() {
               <h3 className="text-lg leading-6 font-medium text-gray-900">
                 Couriers
               </h3>
-              <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button
+                onClick={() => setIsCourierModalOpen(true)}
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Courier
               </button>
@@ -1509,6 +1547,85 @@ export default function DepoPage() {
                   className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   {isSubmitting ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Create Courier Modal */}
+      {isCourierModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full">
+            <div className="flex items-center justify-between px-6 py-4 border-b">
+              <h2 className="text-xl font-bold text-gray-900">
+                Add New Courier
+              </h2>
+              <button
+                onClick={() => setIsCourierModalOpen(false)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCourierSubmit} className="p-6">
+              <div className="grid grid-cols-1 gap-y-6">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Courier Name
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={courierFormData.name}
+                      onChange={handleCourierChange}
+                      required
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Courier Email (Optional)
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      value={courierFormData.email}
+                      onChange={handleCourierChange}
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsCourierModalOpen(false)}
+                  className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  {isSubmitting ? "Adding..." : "Add Courier"}
                 </button>
               </div>
             </form>
