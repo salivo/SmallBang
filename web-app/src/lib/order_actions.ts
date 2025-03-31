@@ -29,8 +29,45 @@ export async function getOrderById(id: string) {
 export async function createOrder(order: any) {
   try {
     await loginAsDepo();
-    return await pb.collection("orders").create(order);
+
+    // Log the incoming order data
+    console.log("Creating order with data:", order);
+
+    // Validate that the courier is provided
+    if (!order.courier || typeof order.courier !== "string") {
+      throw new Error("Courier information is missing or invalid");
+    }
+
+    // Ensure the courier exists in the database
+    const courier = await pb
+      .collection("couriers")
+      .getFirstListItem(`id="${order.courier}"`);
+    if (!courier) {
+      throw new Error("Specified courier does not exist");
+    }
+
+    // Log the courier data
+    console.log("Courier found:", courier);
+
+    // Map the courier field to courier_id for the database
+    const orderData = {
+      ...order,
+      courier_id: order.courier, // Map courier to courier_id
+    };
+    delete orderData.courier; // Remove the original courier field if necessary
+
+    // Log the final order data being sent to the database
+    console.log("Final order data being sent to the database:", orderData);
+
+    // Proceed to create the order
+    const createdOrder = await pb.collection("orders").create(orderData);
+
+    // Log the created order data
+    console.log("Order successfully created:", createdOrder);
+
+    return createdOrder;
   } catch (error: any) {
+    console.error("Error creating order:", error);
     throw new Error("An error occurred while creating order");
   }
 }
