@@ -61,23 +61,23 @@ interface Order {
 // Status options
 const STATUS_OPTIONS = [
   {
-    value: "pending",
-    label: "Pending",
+    value: "Pending",
+    label: "0",
     color: "bg-yellow-100 text-yellow-800",
   },
   {
-    value: "processing",
-    label: "Processing",
+    value: "Processing",
+    label: "1",
     color: "bg-blue-100 text-blue-800",
   },
   {
-    value: "shipped",
-    label: "Shipped",
+    value: "Shipped",
+    label: "2",
     color: "bg-purple-100 text-purple-800",
   },
   {
-    value: "delivered",
-    label: "Delivered",
+    value: "Delivered",
+    label: "3",
     color: "bg-green-100 text-green-800",
   },
   { value: "cancelled", label: "Cancelled", color: "bg-red-100 text-red-800" },

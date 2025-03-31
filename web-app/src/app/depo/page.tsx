@@ -20,8 +20,8 @@ interface FormData {
   Customer_tel: string;
   Customer_email: string;
   Sender_address: string;
-  courier: string;
-  status: string;
+  courier_id: string;
+  Delivery_state: string;
 }
 
 interface Order {
@@ -31,8 +31,8 @@ interface Order {
   Customer_tel: string;
   Customer_email: string;
   Sender_address: string;
-  courier: string;
-  status: string;
+  courier_id: string;
+  Delivery_state: string;
 }
 
 export default function DepoPage() {
@@ -43,7 +43,7 @@ export default function DepoPage() {
     Customer_email: "",
     Sender_address: "",
     courier: "",
-    status: "pending",
+    Delivery_state: "pending",
   });
   const [couriers, setCouriers] = useState<Courier[]>([]);
   const [orders, setOrders] = useState<Order[]>([]); // State for orders
@@ -114,8 +114,8 @@ export default function DepoPage() {
         Customer_tel: "",
         Customer_email: "",
         Sender_address: "",
-        courier: "",
-        status: "pending",
+        courier_id: "",
+        Delivery_state: "pending",
       });
       setIsOpen(false);
     } catch (error) {
@@ -138,14 +138,14 @@ export default function DepoPage() {
       // Map the courier field back to courier_id for the database
       const updatedOrder = {
         ...selectedOrder,
-        courier_id: selectedOrder.courier, // Map courier to courier_id for the backend
+        courier_id: selectedOrder.courier_id, // Map courier to courier_id for the backend
       };
 
       await updateOrder(selectedOrder.id, updatedOrder);
       setOrders((prev) =>
         prev.map((order) =>
           order.id === selectedOrder.id
-            ? { ...selectedOrder, courier: selectedOrder.courier }
+            ? { ...selectedOrder, courier: selectedOrder.courier_id }
             : order
         )
       );
@@ -189,7 +189,7 @@ export default function DepoPage() {
       );
       setSelectedOrder({
         ...order,
-        courier: assignedCourier ? assignedCourier.id : "", // Use the courier ID if found
+        courier_id: assignedCourier ? assignedCourier.id : "", // Use the courier ID if found
       });
     }
     setIsEditOpen(!isEditOpen);
@@ -518,7 +518,7 @@ export default function DepoPage() {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="courier"
                   name="courier"
-                  value={selectedOrder.courier} // Automatically select the assigned courier
+                  value={selectedOrder.courier_id} // Automatically select the assigned courier
                   onChange={handleEditChange}
                   required
                 >
