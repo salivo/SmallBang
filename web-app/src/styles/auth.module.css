@@ -1,0 +1,27 @@
+.main {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+.form {
+    width: 300px;
+    padding: 1.5rem;
+    background-color: #101010;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: solid 0.01rem #303030;
+}
+.error {
+    width: 300px;
+    background-color: #25171c;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: solid 0.08rem #792e2e;
+    text-align: center;
+}

@@ -1,0 +1,11 @@
+.main {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: black;
+}
+.authspace {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
