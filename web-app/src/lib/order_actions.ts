@@ -56,14 +56,10 @@ export async function deleteOrder(id: string) {
 export async function getCouriers() {
   try {
     await loginAsDepo();
-    const couriers = await pb.collection("users").getFullList({
-      filter: "isKuryr=true",
+    const couriers = await pb.collection("couriers").getFullList({
       sort: "name",
     });
 
-    console.log("Raw couriers response:", couriers); // Log the raw response
-
-    // Map the response to ensure it matches the Courier interface
     return couriers.map((courier: any) => ({
       id: courier.id,
       name: courier.name,

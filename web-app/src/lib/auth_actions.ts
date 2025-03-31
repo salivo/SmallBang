@@ -78,12 +78,6 @@ export async function loginAsDepo() {
   const email = process.env.PB_DEPO_EMAIL ?? "";
   const password = process.env.PB_DEPO_PASS ?? "";
 
-  console.log("Depo login attempt with:", {
-    email,
-    passwordExists: !!password,
-    passwordLength: password.length,
-  });
-
   try {
     if (!email || !password) {
       throw new Error("Missing depo credentials in environment variables");
