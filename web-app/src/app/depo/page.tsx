@@ -7,6 +7,7 @@ import {
   getOrders,
   updateOrder, // Import updateOrder function
 } from "@/lib/order_actions"; // Import deleteOrder function
+import { generatePDF } from "@/lib/pdf_gen"; // Import the generatePDF function
 
 // Define types for couriers and form data
 interface Courier {
@@ -173,6 +174,24 @@ export default function DepoPage() {
     }
   };
 
+  const handleGenerateQRCode = async (order: Order) => {
+    try {
+      const pdfBytes = await generatePDF({
+        qrString: order.id,
+        name: order.Customer_name,
+        address: order.Customer_address,
+      });
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${order.Customer_name}_QR_Code.pdf`;
+      link.click();
+    } catch (error) {
+      console.error("Failed to generate QR code PDF:", error);
+      setMessage("Error generating QR code PDF");
+    }
+  };
+
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
@@ -204,13 +223,6 @@ export default function DepoPage() {
         onClick={toggleModal}
       >
         Create New Order
-      </button>
-
-      <button
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
-        onClick={toggleDeleteModal}
-      >
-        Delete Order
       </button>
 
       {isOpen && (
@@ -572,10 +584,16 @@ export default function DepoPage() {
                 Edit
               </button>
               <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mr-2"
                 onClick={() => handleDelete(order.id)}
               >
                 Delete
+              </button>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                onClick={() => handleGenerateQRCode(order)}
+              >
+                Generate QR Code
               </button>
             </div>
           </li>
