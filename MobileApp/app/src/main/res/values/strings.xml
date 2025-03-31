@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SmallBang</string>
+    <string name="login">Login</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="scan">Scan</string>
+    <string name="order_id">Order Id</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="customer_address">Customer Address</string>
+    <string name="customer_tel">Customer Tel</string>
+</resources>
