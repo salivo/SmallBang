@@ -106,3 +106,34 @@ export async function getCouriers() {
     throw new Error("An error occurred while fetching couriers");
   }
 }
+
+export async function createCourier(courier: any) {
+  try {
+    await loginAsDepo();
+
+    // Validate that the courier data is provided and valid
+    if (!courier.name || typeof courier.name !== "string") {
+      throw new Error("Courier name is missing or invalid");
+    }
+
+    // Log the incoming courier data
+    console.log("Creating courier with data:", courier);
+
+    // Prepare the courier data for the database
+    const courierData = {
+      name: courier.name,
+      ...(courier.email && { email: courier.email }), // Optional email field
+    };
+
+    // Create the courier in the database
+    const createdCourier = await pb.collection("couriers").create(courierData);
+
+    // Log the created courier data
+    console.log("Courier successfully created:", createdCourier);
+
+    return createdCourier;
+  } catch (error: any) {
+    console.error("Error creating courier:", error);
+    throw new Error("An error occurred while creating courier");
+  }
+}
