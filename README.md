@@ -1,5 +1,4 @@
-# WebTemplate
-Teplate for Hackatlons
+# WebRace 2025
 ## Instalation
 Download and install [PocketBase](https://github.com/pocketbase/pocketbase)
 > See also installation guide [here](https://pocketbase.io/docs/)
