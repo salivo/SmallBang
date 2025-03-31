@@ -4,7 +4,7 @@ export default function UserName() {
   const name = getUserName();
   return (
     <>
-      <p>Hello {name}</p>
+      <p>{name}</p>
     </>
   );
 }

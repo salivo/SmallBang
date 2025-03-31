@@ -4,10 +4,12 @@ import UserName from "./username";
 export default function Header() {
   return (
     <div className={style.main}>
-      <h1>Header</h1>
+      <h1>SMALLBANG</h1>
       <div className={style.authspace}>
-        <UserName />
-        <AuthButton />
+        <p>
+          <AuthButton />
+          <UserName />
+        </p>
       </div>
     </div>
   );
